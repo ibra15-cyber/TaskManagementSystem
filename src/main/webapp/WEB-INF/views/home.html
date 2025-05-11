@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Manager - Home</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .hero-section {
+      background-color: #f8f9fa;
+      padding: 4rem 0;
+      margin-bottom: 2rem;
+    }
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #0d6efd;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <!-- Hero Section -->
+  <div class="hero-section rounded text-center">
+    <div class="py-5">
+      <h1 class="display-4">Welcome to Task Manager</h1>
+      <p class="lead mb-4">Organize your tasks efficiently and boost your productivity</p>
+      <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+        <a th:href="@{/tasks}" class="btn btn-primary btn-lg px-4 gap-3">View All Tasks</a>
+        <a th:href="@{/tasks/new}" class="btn btn-outline-secondary btn-lg px-4">Create New Task</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <div class="row g-4 py-5">
+    <div class="col-md-4">
+      <div class="card h-100 text-center p-4">
+        <div class="card-body">
+          <div class="feature-icon">
+            <i class="fas fa-list-check"></i>
+          </div>
+          <h3>Organize Tasks</h3>
+          <p>Create, edit, and organize your tasks with an intuitive interface. Keep track of everything you need to do.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 text-center p-4">
+        <div class="card-body">
+          <div class="feature-icon">
+            <i class="fas fa-filter"></i>
+          </div>
+          <h3>Filter & Sort</h3>
+          <p>Filter tasks by status and sort them by due date to focus on what matters most right now.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 text-center p-4">
+        <div class="card-body">
+          <div class="feature-icon">
+            <i class="fas fa-check-double"></i>
+          </div>
+          <h3>Track Progress</h3>
+          <p>Mark tasks as "In Progress" or "Completed" as you work through them and visualize your productivity.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Stats -->
+  <div class="row my-4">
+    <div class="col-12">
+      <div class="card bg-light">
+        <div class="card-body">
+          <h4>Quick Links</h4>
+          <div class="row text-center g-4">
+            <div class="col-md-4">
+              <a th:href="@{/tasks(status='PENDING')}" class="text-decoration-none">
+                <div class="p-3 bg-warning bg-opacity-25 rounded">
+                  <i class="fas fa-clipboard-list text-warning"></i>
+                  <h5>To Do</h5>
+                </div>
+              </a>
+            </div>
+            <div class="col-md-4">
+              <a th:href="@{/tasks(status='IN_PROGRESS')}" class="text-decoration-none">
+                <div class="p-3 bg-info bg-opacity-25 rounded">
+                  <i class="fas fa-spinner text-info"></i>
+                  <h5>In Progress</h5>
+                </div>
+              </a>
+            </div>
+            <div class="col-md-4">
+              <a th:href="@{/tasks(status='COMPLETED')}" class="text-decoration-none">
+                <div class="p-3 bg-success bg-opacity-25 rounded">
+                  <i class="fas fa-check-circle text-success"></i>
+                  <h5>Completed</h5>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-light py-3 mt-5">
+  <div class="container text-center">
+    <p class="text-muted mb-0">Task Manager &copy; 2025 | Spring Boot + Thymeleaf</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

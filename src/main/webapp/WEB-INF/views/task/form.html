@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager - Task Form</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .priority-high { color: #dc3545; }
+        .priority-medium { color: #ffc107; }
+        .priority-low { color: #0dcaf0; }
+    </style>
+</head>
+<body>
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 th:text="${task.id == null ? 'Create New Task' : 'Edit Task'}">Task Form</h1>
+        </div>
+        <div class="col-auto">
+            <a th:href="@{/tasks}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Tasks
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form th:action="@{${task.id == null ? '/tasks' : '/tasks/' + task.id}}"
+                  th:object="${task}"
+                  method="post"
+                  class="needs-validation"
+                  novalidate>
+
+                <!-- Title -->
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
+                    <input type="text"
+                           class="form-control"
+                           id="title"
+                           th:field="*{title}"
+                           placeholder="Enter task title"
+                           required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
+                        Please provide a title.
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control"
+                              id="description"
+                              th:field="*{description}"
+                              placeholder="Enter task description"
+                              rows="3"></textarea>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">
+                        Description error
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Status -->
+                    <div class="col-md-6 mb-3">
+                        <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
+                        <select class="form-select" id="status" th:field="*{status}" required>
+                            <option value="" selected disabled>Select status</option>
+                            <option th:each="statusOption : ${statuses}"
+                                    th:value="${statusOption}"
+                                    th:text="${statusOption.name()}"
+                                    th:selected="${task.status == statusOption}"></option>
+                        </select>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('status')}" th:errors="*{status}">
+                            Please select a status.
+                        </div>
+                    </div>
+
+                    <!-- Priority -->
+                    <div class="col-md-6 mb-3">
+                        <label for="priority" class="form-label">Priority <span class="text-danger">*</span></label>
+                        <select class="form-select" id="priority" th:field="*{priority}" required>
+                            <option value="" selected disabled>Select priority</option>
+                            <option th:each="priorityOption : ${priorities}"
+                                    th:value="${priorityOption}"
+                                    th:text="${priorityOption.name()}"
+                                    th:class="${priorityOption.name() == 'HIGH' ? 'priority-high' : (priorityOption.name() == 'LOW' ? 'priority-low' : 'priority-medium')}"
+                                    th:selected="${task.priority == priorityOption}"></option>
+                        </select>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('priority')}" th:errors="*{priority}">
+                            Please select a priority.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Due Date -->
+                    <div class="col-md-6 mb-3">
+                        <label for="dueDate" class="form-label">Due Date <span class="text-danger">*</span></label>
+                        <input type="datetime-local"
+                               class="form-control"
+                               id="dueDate"
+                               th:field="*{dueDate}"
+                               th:value="${task.dueDate != null ? #temporals.format(task.dueDate, 'yyyy-MM-dd''T''HH:mm') : ''}"
+                               required>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('dueDate')}" th:errors="*{dueDate}">
+                            Please provide a valid due date.
+                        </div>
+                    </div>
+
+                    <!-- Assignee -->
+                    <div class="col-md-6 mb-3">
+                        <label for="assignee" class="form-label">Assignee</label>
+                        <input type="text"
+                               class="form-control"
+                               id="assignee"
+                               th:field="*{assignee}"
+                               placeholder="Who is responsible for this task?">
+                        <div class="form-text">Leave blank if unassigned</div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                    <a th:href="@{/tasks}" class="btn btn-outline-secondary me-md-2">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        <span th:text="${task.id == null ? 'Create Task' : 'Save Changes'}"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Form validation script
+    (() => {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation')
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+</body>
+</html>

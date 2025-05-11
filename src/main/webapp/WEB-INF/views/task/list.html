@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager - All Tasks</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .task-completed { text-decoration: line-through; color: #6c757d; }
+        .filter-badge { cursor: pointer; }
+        .search-container { margin-bottom: 20px; }
+        .priority-high { background-color: #ffdede; }
+        .priority-low { background-color: #e8f4ff; }
+    </style>
+</head>
+<body>
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h1>Task Manager</h1>
+            <p class="lead">Manage your tasks efficiently</p>
+        </div>
+        <div class="col-auto">
+            <a th:href="@{/tasks/new}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> New Task
+            </a>
+            <a th:href="@{/}" class="btn btn-outline-secondary ms-2">
+                <i class="fas fa-home"></i> Back to Home
+            </a>
+        </div>
+    </div>
+
+    <!-- Alert Messages -->
+    <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${message}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+        <form th:action="@{/tasks}" method="get" class="d-flex">
+            <input type="text" name="search" class="form-control me-2" placeholder="Search tasks..."
+                   th:value="${search}">
+            <button type="submit" class="btn btn-outline-primary">Search</button>
+        </form>
+    </div>
+
+    <!-- Status Filters -->
+    <div class="mb-3">
+        <h6>Status:</h6>
+        <div class="d-flex flex-wrap gap-2">
+            <a th:href="@{/tasks(priority=${selectedPriority})}" class="badge bg-secondary text-decoration-none">All</a>
+            <a th:each="statusOption : ${statuses}"
+               th:href="@{/tasks(status=${statusOption},priority=${selectedPriority})}"
+               th:text="${statusOption.name()}"
+               th:class="${selectedStatus == statusOption ? 'badge bg-primary text-decoration-none' : 'badge bg-secondary text-decoration-none'}"></a>
+        </div>
+    </div>
+
+    <!-- Priority Filters -->
+    <div class="mb-3">
+        <h6>Priority:</h6>
+        <div class="d-flex flex-wrap gap-2">
+            <a th:href="@{/tasks(status=${selectedStatus})}" class="badge bg-secondary text-decoration-none">All</a>
+            <a th:each="priorityOption : ${priorities}"
+               th:href="@{/tasks(status=${selectedStatus},priority=${priorityOption})}"
+               th:text="${priorityOption.name()}"
+               th:class="${selectedPriority == priorityOption ? 'badge bg-primary text-decoration-none' : 'badge bg-secondary text-decoration-none'}"></a>
+        </div>
+    </div>
+
+    <!-- Assignee Filter (if there are assigned tasks) -->
+    <div th:if="${!#lists.isEmpty(assignees)}" class="mb-3">
+        <h6>Assignee:</h6>
+        <div class="d-flex flex-wrap gap-2">
+            <a th:href="@{/tasks(status=${selectedStatus},priority=${selectedPriority})}" class="badge bg-secondary text-decoration-none">All</a>
+            <a th:each="assignee : ${assignees}"
+               th:href="@{/tasks(status=${selectedStatus},priority=${selectedPriority},assignee=${assignee})}"
+               th:text="${assignee}"
+               th:class="${selectedAssignee == assignee ? 'badge bg-primary text-decoration-none' : 'badge bg-secondary text-decoration-none'}"></a>
+        </div>
+    </div>
+
+    <!-- Sort Options -->
+    <div class="mb-3">
+        <div class="btn-group">
+            <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                Sort By
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" th:href="@{/tasks(status=${selectedStatus},priority=${selectedPriority},assignee=${selectedAssignee},sort='dueDate')}">Due Date (Ascending)</a></li>
+                <li><a class="dropdown-item" th:href="@{/tasks(status=${selectedStatus},priority=${selectedPriority},assignee=${selectedAssignee},sort='dueDateDesc')}">Due Date (Descending)</a></li>
+                <li><a class="dropdown-item" th:href="@{/tasks(status=${selectedStatus},priority=${selectedPriority},assignee=${selectedAssignee},sort='priority')}">Priority (High to Low)</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Tasks List -->
+    <div class="card">
+        <div class="card-body">
+            <div th:if="${#lists.isEmpty(tasks)}" class="text-center p-4">
+                <p class="text-muted">No tasks found. Create a new task to get started!</p>
+            </div>
+            <div th:unless="${#lists.isEmpty(tasks)}" class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Priority</th>
+                        <th>Assignee</th>
+                        <th>Due Date</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="task : ${tasks}"
+                        th:class="${task.status.name() == 'COMPLETED'} ? 'table-secondary' :
+                                 (${task.priority.name() == 'HIGH'} ? 'priority-high' :
+                                 (${task.priority.name() == 'LOW'} ? 'priority-low' : ''))">
+                        <td>
+                            <span th:text="${task.title}" th:class="${task.status.name() == 'COMPLETED'} ? 'task-completed' : ''"></span>
+                        </td>
+                        <td>
+                            <span th:text="${#strings.abbreviate(task.description, 50)}" th:class="${task.status.name() == 'COMPLETED'} ? 'task-completed' : ''"></span>
+                        </td>
+                        <td>
+                            <span th:if="${task.status.name() == 'TODO'}" class="badge bg-warning text-dark">To Do</span>
+                            <span th:if="${task.status.name() == 'IN_PROGRESS'}" class="badge bg-info">In Progress</span>
+                            <span th:if="${task.status.name() == 'COMPLETED'}" class="badge bg-success">Completed</span>
+                            <span th:if="${task.status.name() == 'PENDING'}" class="badge bg-secondary">Pending</span>
+                        </td>
+                        <td>
+                            <span th:if="${task.priority.name() == 'HIGH'}" class="badge bg-danger">High</span>
+                            <span th:if="${task.priority.name() == 'MEDIUM'}" class="badge bg-warning text-dark">Medium</span>
+                            <span th:if="${task.priority.name() == 'LOW'}" class="badge bg-info">Low</span>
+                        </td>
+                        <td>
+                            <span th:text="${task.assignee != null and !task.assignee.isEmpty()} ? ${task.assignee} : 'Unassigned'"></span>
+                        </td>
+                        <td th:text="${#temporals.format(task.dueDate, 'yyyy-MM-dd')}"></td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a th:href="@{/tasks/{id}(id=${task.id})}" class="btn btn-outline-primary">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a th:href="@{/tasks/{id}/edit(id=${task.id})}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a th:if="${task.status.name() != 'COMPLETED'}"
+                                   th:href="@{/tasks/{id}/complete(id=${task.id})}"
+                                   class="btn btn-outline-success"
+                                   title="Mark as Completed">
+                                    <i class="fas fa-check"></i>
+                                </a>
+                                <a th:if="${task.status.name() != 'IN_PROGRESS' && task.status.name() != 'COMPLETED'}"
+                                   th:href="@{/tasks/{id}/inprogress(id=${task.id})}"
+                                   class="btn btn-outline-info"
+                                   title="Mark as In Progress">
+                                    <i class="fas fa-spinner"></i>
+                                </a>
+                                <a th:href="@{/tasks/{id}/delete(id=${task.id})}"
+                                   class="btn btn-outline-danger"
+                                   onclick="return confirm('Are you sure you want to delete this task?')">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

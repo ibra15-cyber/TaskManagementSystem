@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Management System</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+</head>
+<body>
+<div class="container">
+    <h1>Task Management System</h1>
+    <p th:text="${message}">Welcome message will be displayed here</p>
+
+    <div class="content">
+        <p>This is a simple task management application.</p>
+        <a href="#" th:href="@{/tasks}">View Tasks</a>
+    </div>
+</div>
+</body>
+</html>
