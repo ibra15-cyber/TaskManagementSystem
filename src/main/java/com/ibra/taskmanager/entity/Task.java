@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
 
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -61,6 +62,9 @@ public class Task {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
+    }
+
+    public Task(long l, String s, String s1, TaskStatus taskStatus, TaskPriority taskPriority, String assigneeA, LocalDate now) {
     }
 
     // Getters and Setters

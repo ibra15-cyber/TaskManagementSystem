@@ -42,14 +42,9 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-//    @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public List<Task> getAllTasks() {
-        List<Task> tasks =  taskRepository.findAll();
-
-        for (Task task : tasks) {
-            log.warn("Task....................", task);
-        }
-        return tasks;
+        return taskRepository.findAll();
     }
 
     @Override
