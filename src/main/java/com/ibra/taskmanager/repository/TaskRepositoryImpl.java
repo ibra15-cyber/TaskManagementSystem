@@ -25,7 +25,11 @@ public class TaskRepositoryImpl implements TaskRepository {
     private static final Logger logger = LoggerFactory.getLogger(TaskRepositoryImpl.class);
 
     @PersistenceContext
+<<<<<<< HEAD
     public EntityManager entityManager;
+=======
+    private EntityManager entityManager;
+>>>>>>> 063f6551076b86830acf172a465b709021f783cb
 
     @Override
     public Task save(Task task) {
