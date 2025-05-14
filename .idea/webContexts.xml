@@ -4,6 +4,7 @@
     <option name="state">
       <map>
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/task/list.html" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/templates/task" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/home.html" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/task/form.html" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/task" />
       </map>
     </option>

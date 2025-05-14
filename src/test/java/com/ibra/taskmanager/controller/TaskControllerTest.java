@@ -1,6 +1,5 @@
-package com.ibra.taskmanger.controller;
+package com.ibra.taskmanager.controller;
 
-import com.ibra.taskmanager.controller.TaskController;
 import com.ibra.taskmanager.entity.Task;
 import com.ibra.taskmanager.enums.TaskPriority;
 import com.ibra.taskmanager.enums.TaskStatus;
@@ -20,7 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -34,15 +32,6 @@ public class TaskControllerTest {
 
     @Mock
     private TaskService taskService;
-
-    @Mock
-    private Model model;
-
-    @Mock
-    private BindingResult bindingResult;
-
-    @Mock
-    private RedirectAttributes redirectAttributes;
 
     @InjectMocks
     private TaskController taskController;

@@ -85,8 +85,8 @@ public class WebConfig implements WebMvcConfigurer {
         ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
         try {
             viewResolver.setTemplateEngine(templateEngine());
-            viewResolver.setOrder(1); // If you have multiple view resolvers
-            viewResolver.setViewNames(new String[]{"*.html", "*.xhtml"}); // Specify which view names this resolver handles
+            viewResolver.setOrder(1);
+            viewResolver.setViewNames(new String[]{"*.html", "*.xhtml"});
             logger.info("View resolver bean initialized.");
             return viewResolver;
         } catch (IllegalArgumentException e) {
@@ -137,7 +137,6 @@ public class WebConfig implements WebMvcConfigurer {
         }
     }
 
-    // Formatter for date inputs
     @Override
     public void addFormatters(FormatterRegistry registry) {
         try {

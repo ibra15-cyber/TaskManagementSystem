@@ -66,6 +66,9 @@ public class AppConfig {
         }
     }
 
+
+
+
     @Bean
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();

@@ -1,4 +1,4 @@
-package com.ibra.taskmanger.task;
+package com.ibra.taskmanager.task;
 
 import com.ibra.taskmanager.entity.Task;
 import com.ibra.taskmanager.enums.TaskPriority;

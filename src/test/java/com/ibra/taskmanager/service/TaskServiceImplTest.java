@@ -1,9 +1,8 @@
-package com.ibra.taskmanger.service;
+package com.ibra.taskmanager.service;
 
 import com.ibra.taskmanager.entity.Task;
 import com.ibra.taskmanager.enums.TaskStatus;
 import com.ibra.taskmanager.repository.TaskRepository;
-import com.ibra.taskmanager.service.TaskServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

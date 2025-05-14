@@ -1,7 +1,5 @@
-package com.ibra.taskmanger.config;
+package com.ibra.taskmanager.config;
 
-import com.ibra.taskmanager.config.WebConfig;
-import com.ibra.taskmanager.config.AppConfig; // Import AppConfig
 import com.ibra.taskmanager.controller.TaskController;
 import com.ibra.taskmanager.service.TaskService;
 import org.junit.jupiter.api.Test;
