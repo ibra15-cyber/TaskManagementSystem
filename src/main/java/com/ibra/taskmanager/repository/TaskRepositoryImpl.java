@@ -25,14 +25,11 @@ public class TaskRepositoryImpl implements TaskRepository {
     private static final Logger logger = LoggerFactory.getLogger(TaskRepositoryImpl.class);
 
     @PersistenceContext
-<<<<<<< HEAD
     public EntityManager entityManager;
-=======
-    private EntityManager entityManager;
->>>>>>> 063f6551076b86830acf172a465b709021f783cb
 
     @Override
     public Task save(Task task) {
+        System.out.println(task);
         if (task == null) {
             logger.warn("Attempted to save a null task.");
             throw new IllegalArgumentException("Task cannot be null");
@@ -42,9 +39,15 @@ public class TaskRepositoryImpl implements TaskRepository {
             throw new IllegalArgumentException("Task title cannot be null or empty");
         }
         try {
-            entityManager.persist(task);
-            logger.info("Task saved successfully: {}", task);
-            return task;
+            if (task.getId() == null) {  // Check if it's a new task
+                entityManager.persist(task);
+                logger.info("Task saved successfully: {}", task);
+                return task;
+            } else {
+                Task mergedTask = entityManager.merge(task); // Use merge for updates
+                logger.info("Task updated successfully: {}", mergedTask);
+                return mergedTask;
+            }
         } catch (Exception e) {
             logger.error("Error saving task: {}", task, e);
             throw new RuntimeException("Error saving task", e);
